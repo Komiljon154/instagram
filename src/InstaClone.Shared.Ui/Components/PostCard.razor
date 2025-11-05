@@ -1,0 +1,29 @@
+@using InstaClone.Core.DTOs
+
+<MudPaper Elevation="3" Class="pa-4">
+    <MudStack Spacing="3">
+        <MudStack Spacing="2" Row="true" AlignItems="AlignItems.Center">
+            <MudAvatar Image="@Post.UserProfilePictureUrl" />
+            <MudText Typo="Typo.subtitle1"><b>@Post.Username</b></MudText>
+        </MudStack>
+
+        <MudCard>
+            <MudCardMedia Image="@Post.ImageUrl" Height="400" />
+        </MudCard>
+
+        <MudStack Spacing="2" Row="true">
+            <MudIconButton Icon="@Icons.Material.Outlined.FavoriteBorder" Color="Color.Default" />
+            <MudIconButton Icon="@Icons.Material.Outlined.ChatBubbleOutline" Color="Color.Default" />
+            <MudIconButton Icon="@Icons.Material.Outlined.Send" Color="Color.Default" />
+        </MudStack>
+
+        <MudText Typo="Typo.body2"><b>@Post.LikeCount likes</b></MudText>
+        <MudText Typo="Typo.body2"><b>@Post.Username</b> @Post.Caption</MudText>
+        <MudText Typo="Typo.caption" Style="color: dimgray;">@Post.CreatedAt.ToString("MMMM dd, yyyy")</MudText>
+    </MudStack>
+</MudPaper>
+
+@code {
+    [Parameter]
+    public PostDto Post { get; set; } = new();
+}

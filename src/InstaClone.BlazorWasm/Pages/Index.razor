@@ -1,0 +1,58 @@
+@page "/"
+@using InstaClone.Core.DTOs
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.SignalR.Client
+@using InstaClone.Shared.Ui.Components
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
+
+<PageTitle>InstaClone Feed (WASM)</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <MudText Typo="Typo.h3" GutterBottom="true" Class="my-4">Feed (WASM)</MudText>
+
+    @if (posts == null)
+    {
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    }
+    else
+    {
+        <MudStack Spacing="4">
+            @foreach (var post in posts)
+            {
+                <PostCard Post="post" />
+            }
+        </MudStack>
+    }
+</MudContainer>
+
+@code {
+    private List<PostDto>? posts;
+    private HubConnection? hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await Http.GetFromJsonAsync<List<PostDto>>("api/posts");
+
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("https://localhost:7123/notificationHub"))
+            .Build();
+
+        hubConnection.On<PostDto>("ReceiveNewPost", (newPost) =>
+        {
+            posts?.Insert(0, newPost);
+            InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}

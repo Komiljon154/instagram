@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "InstaClone.Grpc";
+
+package user;
+
+service User {
+  rpc GetUserProfile (GetUserRequest) returns (GetUserResponse);
+}
+
+message GetUserRequest {
+  string username = 1;
+}
+
+message GetUserResponse {
+  string id = 1;
+  string username = 2;
+  string full_name = 3;
+  string profile_picture_url = 4;
+}

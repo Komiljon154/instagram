@@ -1,0 +1,29 @@
+@model List<InstaClone.Core.DTOs.PostDto>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">InstaClone MVC Feed</h1>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            @foreach (var post in Model)
+            {
+                <div class="card my-3">
+                    <div class="card-header">
+                        <b>@post.Username</b>
+                    </div>
+                    <img src="@post.ImageUrl" class="card-img-top" alt="Post Image">
+                    <div class="card-body">
+                        <p class="card-text"><b>@post.LikeCount likes</b></p>
+                        <p class="card-text"><b>@post.Username</b> @post.Caption</p>
+                        <p class="card-text"><small class="text-muted">@post.CreatedAt.ToShortDateString()</small></p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
